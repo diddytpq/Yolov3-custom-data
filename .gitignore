@@ -22,6 +22,7 @@ weights/
 
 *.pkl
 data/coco/
+auto_label_data/
 .vscode/
 
 
