@@ -6,6 +6,9 @@
 *.avi
 *.mov
 *.mp4
+*.txt
+*.jpg
+
 
 videos/
 

@@ -10,9 +10,8 @@ Usage:
                                                              path/*.jpg  # glob
                                                              'https://youtu.be/Zgi9g1ksQHc'  # YouTube
                                                              'rtsp://example.com/media.mp4'  # RTSP, RTMP, HTTP stream
-python auto_lable.py --weights weights/yolov3-spp.pt 
-python auto_lable.py --weights weights/yolov3-spp.pt 
-
+python auto_label.py --weights weights/yolov3-spp.pt 
+python auto_label.py --weights weights/yolov3-spp.pt --classes 0 --source fire/train/images/
 
 """
 
@@ -118,7 +117,7 @@ def run(weights=ROOT / 'yolov3.pt',  # model.pt path(s)
     
     # video_name = "videos/fallen_test_2.mp4"
     # video_name = "videos/0.jpg"
-    data_path = "data/coco/fallen_person/images/train/"
+    data_path = source
 
     # cap_main = cv2.VideoCapture(video_name)
     
