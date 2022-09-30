@@ -1,7 +1,9 @@
 import os
 
+"""
+python label_concat_tool.py 
 
-
+"""
 current_path = os.getcwd()
 
 data_path = current_path + "/fire/train_plus/"
@@ -33,7 +35,7 @@ for i in range(len(file_list_1)):
             new_text += data
 
 
-    with open('new_data/' + file_list_1[i], 'w') as newfile:
+    with open('auto_label_data/' + file_list_1[i], 'w') as newfile:
         newfile.write(new_text)
 
     # print(i)

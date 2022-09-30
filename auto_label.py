@@ -3,15 +3,9 @@
 Run inference on images, videos, directories, streams, etc.
 
 Usage:
-    $ python path/to/detect.py --weights yolov3.pt --source 0  # webcam
-                                                             img.jpg  # image
-                                                             vid.mp4  # video
-                                                             path/  # directory
-                                                             path/*.jpg  # glob
-                                                             'https://youtu.be/Zgi9g1ksQHc'  # YouTube
-                                                             'rtsp://example.com/media.mp4'  # RTSP, RTMP, HTTP stream
+
 python auto_label.py --weights weights/yolov3-spp.pt 
-python auto_label.py --weights weights/yolov3-spp.pt --classes 0 --source fire/train/images/
+python auto_label.py --weights weights/yolov3-spp.pt --classes 0 --source invasion/train/images/
 
 """
 
@@ -53,11 +47,27 @@ def img_preprocessing(img, img_size=640, stride=32):
 
 def auto_label(im, xyxy, cls):
     x0, y0, x1, y1 = float(xyxy[0].cpu()), float(xyxy[1].cpu()), float(xyxy[2].cpu()), float(xyxy[3].cpu())
-    
-    nx0, nx1 = x0 / (x0 + x1), x1 / (x0 + x1)  
-    ny0, ny1 = y0 / (y0 + y1), y1 / (y0 + y1)  
 
-    label_txt = str(int(cls.cpu()))+' '+ str(nx0) + ' '+ str(ny0) +' '+ str(nx1) +' '+ str(ny1) +'\n'
+    total_x , total_y = im.shape[1], im.shape[0]
+
+    print(im.shape)
+    
+    print(x0, y0, x1, y1)
+    
+    nx0, nx1 = x0 / total_x, x1 / total_x
+    ny0, ny1 = y0 / total_y, y1 / total_y
+
+
+    nw = nx1 - nx0
+    nh = ny1 - ny0
+
+    ncx = nx0 + nw/2
+    ncy = ny0 + nh/2
+
+
+
+    label_txt = str(int(cls.cpu()))+' '+ str(ncx) + ' '+ str(ncy) +' '+ str(nw) +' '+ str(nh) +'\n'
+    print(label_txt)
 
     return label_txt
 
@@ -180,7 +190,7 @@ def run(weights=ROOT / 'yolov3.pt',  # model.pt path(s)
                     label = None if hide_labels else (names[c] if hide_conf else f'{names[c]} {conf:.2f}')
                     annotator.box_label(xyxy, label, color=colors(c, True))
 
-                    label_txt = auto_label(im, xyxy, cls)
+                    label_txt = auto_label(frame, xyxy, cls)
 
                     total_label_txt += label_txt
 
@@ -205,7 +215,7 @@ def parse_opt():
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov3.pt', help='model path(s)')
     parser.add_argument('--source', type=str, default=ROOT / 'data/images', help='file/dir/URL/glob, 0 for webcam')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
-    parser.add_argument('--conf-thres', type=float, default=0.70, help='confidence threshold')
+    parser.add_argument('--conf-thres', type=float, default=0.50, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
     parser.add_argument('--max-det', type=int, default=1000, help='maximum detections per image')
     parser.add_argument('--device', default='0', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
