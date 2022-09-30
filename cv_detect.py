@@ -10,7 +10,7 @@ Usage:
                                                              path/*.jpg  # glob
                                                              'https://youtu.be/Zgi9g1ksQHc'  # YouTube
                                                              'rtsp://example.com/media.mp4'  # RTSP, RTMP, HTTP stream
-python cv_detect.py --weights best.pt 
+python cv_detect.py --weights yolov3-spp.pt --classes 0
 
 """
 
@@ -102,7 +102,7 @@ def run(weights=ROOT / 'yolov3.pt',  # model.pt path(s)
     dt, seen = [0.0, 0.0, 0.0], 0
     # for path, im, im0s, vid_cap, s in dataset:
     
-    # video_name = "videos/fallen_test_2.mp4"
+    #video_name = "videos/fire_test_2.mp4"
     video_name = "videos/0.jpg"
 
 
