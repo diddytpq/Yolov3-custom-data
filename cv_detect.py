@@ -10,7 +10,7 @@ Usage:
                                                              path/*.jpg  # glob
                                                              'https://youtu.be/Zgi9g1ksQHc'  # YouTube
                                                              'rtsp://example.com/media.mp4'  # RTSP, RTMP, HTTP stream
-python cv_detect.py --weights yolov3-spp.pt --classes 0
+python cv_detect.py --weights weights/best.pt
 
 """
 
@@ -54,8 +54,8 @@ def img_preprocessing(img, img_size=640, stride=32):
 def run(weights=ROOT / 'yolov3.pt',  # model.pt path(s)
         source=ROOT / 'data/images',  # file/dir/URL/glob, 0 for webcam
         imgsz=640,  # inference size (pixels)
-        conf_thres=0.50,  # confidence threshold
-        iou_thres=0.80,  # NMS IOU threshold
+        conf_thres=0.25,  # confidence threshold
+        iou_thres=0.45,  # NMS IOU threshold
         max_det=1000,  # maximum detections per image
         device='0',  # cuda device, i.e. 0 or 0,1,2,3 or cpu
         view_img=False,  # show results
@@ -102,8 +102,9 @@ def run(weights=ROOT / 'yolov3.pt',  # model.pt path(s)
     dt, seen = [0.0, 0.0, 0.0], 0
     # for path, im, im0s, vid_cap, s in dataset:
     
-    #video_name = "videos/fire_test_2.mp4"
-    video_name = "videos/0.jpg"
+    video_name = "videos/fire_test_3.mp4"
+    #video_name = "videos/0.jpg"
+    # video_name = 0
 
 
     cap_main = cv2.VideoCapture(video_name)
@@ -113,7 +114,7 @@ def run(weights=ROOT / 'yolov3.pt',  # model.pt path(s)
     
     start_frame = int(total_frame / 3)
 
-    cap_main.set(cv2.CAP_PROP_POS_FRAMES, start_frame) #set start frame number
+    cap_main.set(cv2.CAP_PROP_POS_FRAMES, 0) #set start frame number
 
     # while cap_main.isOpened():
     while True:
@@ -174,7 +175,7 @@ def run(weights=ROOT / 'yolov3.pt',  # model.pt path(s)
 
         if True:
             cv2.imshow("main_frame", im0)
-            key = cv2.waitKey(0)
+            key = cv2.waitKey(1)
 
             if key == 27: break
 
@@ -186,7 +187,7 @@ def parse_opt():
     parser.add_argument('--weights', nargs='+', type=str, default=ROOT / 'yolov3.pt', help='model path(s)')
     parser.add_argument('--source', type=str, default=ROOT / 'data/images', help='file/dir/URL/glob, 0 for webcam')
     parser.add_argument('--imgsz', '--img', '--img-size', nargs='+', type=int, default=[640], help='inference size h,w')
-    parser.add_argument('--conf-thres', type=float, default=0.25, help='confidence threshold')
+    parser.add_argument('--conf-thres', type=float, default=0.15, help='confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='NMS IoU threshold')
     parser.add_argument('--max-det', type=int, default=1000, help='maximum detections per image')
     parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
